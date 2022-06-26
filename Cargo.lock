@@ -101,7 +101,7 @@ dependencies = [
 
 [[package]]
 name = "sdl_event_server"
-version = "0.1.1"
+version = "0.1.2"
 dependencies = [
  "crossbeam-channel",
  "sdl2",
