@@ -1,7 +1,7 @@
 use serde::{Serialize, Deserialize};
 use sdl2::controller::{Axis, Button};
 
-#[derive(Serialize, Deserialize)]
+#[derive(Copy, Clone, Serialize, Deserialize)]
 pub enum SdlAxis {
     LeftX,
     LeftY,
@@ -31,7 +31,7 @@ impl SdlAxis {
     }
 }
 
-#[derive(Serialize, Deserialize)]
+#[derive(Copy, Clone, Serialize, Deserialize)]
 pub enum SdlButton {
     A,
     B,
@@ -96,7 +96,7 @@ impl SdlButton {
     }
 }
 
-#[derive(Serialize, Deserialize)]
+#[derive(Copy, Clone, Serialize, Deserialize)]
 pub enum SdlEvent {
     AxisMotion(u32, u32, SdlAxis, i16),
     ButtonPress(u32, u32, SdlButton, bool)
