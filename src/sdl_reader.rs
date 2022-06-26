@@ -1,5 +1,6 @@
-use crate::sdl_event::*;
+use std::collections::HashMap;
 
+use crate::sdl_event::*;
 use sdl2::{
     Sdl,
     GameControllerSubsystem,
@@ -9,7 +10,6 @@ use sdl2::{
     controller::GameController,
     VideoSubsystem
 };
-use std::collections::HashMap;
 
 pub struct SdlReader {
     game_controllers: HashMap<u32, GameController>,
@@ -58,13 +58,48 @@ impl SdlReader {
 
                     // Push these events.
                     Event::ControllerAxisMotion { timestamp, which, axis, value } => {
-                        events.push(SdlEvent::AxisMotion(timestamp, which, to_sdl_axis(axis), value));
+                        events.push(
+                            SdlEvent::AxisMotion(
+                                timestamp,
+                                which,
+                                SdlAxis::from_raw_sdl(axis),
+                                value
+                            )
+                        );
                     },
                     Event::ControllerButtonDown { timestamp, which, button } => {
-                        events.push(SdlEvent::ButtonPress(timestamp, which, to_sdl_button(button), true));
+                        events.push(
+                            SdlEvent::ButtonPress(
+                                timestamp,
+                                which,
+                                SdlButton::from_raw_sdl(
+                                    button,
+                                    self.game_controllers
+                                        .get(&which)
+                                        .expect("Failed to get game controller.")
+                                        .name()
+                                        .as_str()
+                                ),
+                                true
+                            )
+                        );
                     },
                     Event::ControllerButtonUp { timestamp, which, button } => {
-                        events.push(SdlEvent::ButtonPress(timestamp, which, to_sdl_button(button), false));
+                        events.push(
+                            SdlEvent::ButtonPress(
+                                timestamp,
+                                which,
+                                SdlButton::from_raw_sdl(
+                                    button,
+                                    self.game_controllers
+                                        .get(&which)
+                                        .expect("Failed to get game controller.")
+                                        .name()
+                                        .as_str()
+                                ),
+                                false
+                            )
+                        );
                     },
 
                     // Ignore all other event types.

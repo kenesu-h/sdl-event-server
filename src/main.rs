@@ -1,11 +1,13 @@
 use sdl_event_server::{SdlEvent, SdlReader, StdioInterface};
 use crossbeam_channel::{tick, select, Receiver};
-use std::time::Instant;
-use std::sync::{
-    Arc, Mutex,
-    atomic::{AtomicBool, Ordering}
+
+use std::{
+    time::{self, Instant},
+    sync::{
+        Arc, Mutex,
+        atomic::{AtomicBool, Ordering}
+    }
 };
-use std::time;
 
 const FREQUENCY: i32 = 60;
 

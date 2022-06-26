@@ -1,7 +1,3 @@
-use crate::sdl_event::SdlEvent;
-
-use crossbeam_channel::{select, Receiver};
-use serde_json::json;
 use std::{
     io,
     io::{BufReader, BufRead, BufWriter, Write},
@@ -12,6 +8,10 @@ use std::{
         atomic::{AtomicBool, Ordering}
     }
 };
+
+use crate::sdl_event::SdlEvent;
+use crossbeam_channel::{select, Receiver};
+use serde_json::json;
 
 struct StdinReader {
     reader: BufReader<io::Stdin>,

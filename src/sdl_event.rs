@@ -11,14 +11,23 @@ pub enum SdlAxis {
     TriggerRight
 }
 
-pub fn to_sdl_axis(axis: Axis) -> SdlAxis {
-    match axis {
-        Axis::LeftX => SdlAxis::LeftX,
-        Axis::LeftY => SdlAxis::LeftY,
-        Axis::RightX => SdlAxis::RightX,
-        Axis::RightY => SdlAxis::RightY,
-        Axis::TriggerLeft => SdlAxis::TriggerLeft,
-        Axis::TriggerRight => SdlAxis::TriggerRight
+impl SdlAxis {
+    pub fn is_trigger(&self) -> bool {
+        match self {
+            Self::TriggerLeft | Self::TriggerRight => true,
+            _ => false
+        }
+    }
+
+    pub fn from_raw_sdl(axis: Axis) -> Self {
+        match axis {
+            Axis::LeftX => Self::LeftX,
+            Axis::LeftY => Self::LeftY,
+            Axis::RightX => Self::RightX,
+            Axis::RightY => Self::RightY,
+            Axis::TriggerLeft => Self::TriggerLeft,
+            Axis::TriggerRight => Self::TriggerRight
+        }
     }
 }
 
@@ -47,29 +56,43 @@ pub enum SdlButton {
     Touchpad
 }
 
-pub fn to_sdl_button(button: Button) -> SdlButton {
-    match button {
-        Button::A => SdlButton::A,
-        Button::B => SdlButton::B,
-        Button::X => SdlButton::X,
-        Button::Y => SdlButton::Y,
-        Button::Back => SdlButton::Back,
-        Button::Guide => SdlButton::Guide,
-        Button::Start => SdlButton::Start,
-        Button::LeftStick => SdlButton::LeftStick,
-        Button::RightStick => SdlButton::RightStick,
-        Button::LeftShoulder => SdlButton::LeftShoulder,
-        Button::RightShoulder => SdlButton::RightShoulder,
-        Button::DPadUp => SdlButton::DPadUp,
-        Button::DPadDown => SdlButton::DPadDown,
-        Button::DPadLeft => SdlButton::DPadLeft,
-        Button::DPadRight => SdlButton::DPadRight,
-        Button::Misc1 => SdlButton::Misc1,
-        Button::Paddle1 => SdlButton::Paddle1,
-        Button::Paddle2 => SdlButton::Paddle2,
-        Button::Paddle3 => SdlButton::Paddle3,
-        Button::Paddle4 => SdlButton::Paddle4,
-        Button::Touchpad => SdlButton::Touchpad
+impl SdlButton {
+    pub fn from_raw_sdl(button: Button, controller_name: &str) -> Self {
+        match button {
+            Button::A => match controller_name {
+                "Nintendo Switch Pro Controller" => Self::B,
+                _ => Self::A
+            },
+            Button::B => match controller_name {
+                "Nintendo Switch Pro Controller" => Self::A,
+                _ => Self::B
+            },
+            Button::X => match controller_name {
+                "Nintendo Switch Pro Controller" => Self::Y,
+                _ => Self::X
+            },
+            Button::Y => match controller_name {
+                "Nintendo Switch Pro Controller" => Self::X,
+                _ => Self::Y
+            },
+            Button::Back => Self::Back,
+            Button::Guide => Self::Guide,
+            Button::Start => Self::Start,
+            Button::LeftStick => Self::LeftStick,
+            Button::RightStick => Self::RightStick,
+            Button::LeftShoulder => Self::LeftShoulder,
+            Button::RightShoulder => Self::RightShoulder,
+            Button::DPadUp => Self::DPadUp,
+            Button::DPadDown => Self::DPadDown,
+            Button::DPadLeft => Self::DPadLeft,
+            Button::DPadRight => Self::DPadRight,
+            Button::Misc1 => Self::Misc1,
+            Button::Paddle1 => Self::Paddle1,
+            Button::Paddle2 => Self::Paddle2,
+            Button::Paddle3 => Self::Paddle3,
+            Button::Paddle4 => Self::Paddle4,
+            Button::Touchpad => Self::Touchpad
+        }
     }
 }
 
