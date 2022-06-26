@@ -1,11 +1,4 @@
-mod sdl_event;
-mod sdl_reader;
-mod stdio_interface;
-
-pub use sdl_event::SdlEvent;
-pub use sdl_reader::SdlReader;
-pub use stdio_interface::StdioInterface;
-
+use sdl_event_server::{SdlEvent, SdlReader, StdioInterface};
 use crossbeam_channel::{tick, select, Receiver};
 use std::time::Instant;
 use std::sync::{

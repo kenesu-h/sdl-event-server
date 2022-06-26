@@ -1,5 +1,5 @@
 [package]
-name = "sdl-event-server"
+name = "sdl_event_server"
 version = "0.1.0"
 edition = "2021"
 
