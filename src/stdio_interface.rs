@@ -36,15 +36,13 @@ impl StdinReader {
 }
 
 struct StdoutWriter {
-    writer: BufWriter<io::Stdout>,
-    error: BufWriter<io::Stderr>
+    writer: BufWriter<io::Stdout>
 }
 
 impl StdoutWriter {
     pub fn new() -> StdoutWriter {
         return StdoutWriter {
-            writer: BufWriter::new(io::stdout()),
-            error: BufWriter::new(io::stderr())
+            writer: BufWriter::new(io::stdout())
         }
     }
 

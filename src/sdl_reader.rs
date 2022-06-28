@@ -47,49 +47,57 @@ impl SdlReader {
             match self.event_pump.poll_event() {
                 None => break,
                 Some(event) => match event {
-                    // Store and remove game controller instances to receive events from them.
-                    Event::ControllerDeviceAdded { which, .. } => {
-                        let instance: GameController = self.game_controller.open(which).unwrap();
-                        self.game_controllers.insert(instance.instance_id(), instance);
+                    Event::ControllerDeviceAdded { timestamp, which } => {
+                        let instance: GameController = self.game_controller
+                            .open(which)
+                            .unwrap();
+                        self.game_controllers
+                            .insert(instance.instance_id(), instance);
+                        events.push(
+                            SdlEvent::ControllerAdded { timestamp, which }
+                        );
                     },
-                    Event::ControllerDeviceRemoved { which, .. } => {
+                    Event::ControllerDeviceRemoved { timestamp, which } => {
                         self.game_controllers.remove(&which);
-                    },
-
-                    // Push these events.
-                    Event::ControllerAxisMotion { timestamp, which, axis, value } => {
                         events.push(
-                            SdlEvent::AxisMotion(
-                                timestamp,
-                                which,
-                                SdlAxis::from_raw_sdl(axis),
-                                value
-                            )
+                            SdlEvent::ControllerRemoved { timestamp, which }
                         );
                     },
-                    Event::ControllerButtonDown { timestamp, which, button } => {
-                        events.push(
-                            SdlEvent::ButtonPress(
-                                timestamp,
-                                which,
-                                SdlButton::from_raw_sdl(
-                                    button,
-                                    self.game_controllers
-                                        .get(&which)
-                                        .expect("Failed to get game controller.")
-                                        .name()
-                                        .as_str()
-                                ),
-                                true
-                            )
-                        );
-                    },
+                    Event::ControllerAxisMotion { timestamp, which, axis, value }
+                        => {
+                            events.push(
+                                SdlEvent::AxisMotion {
+                                    timestamp,
+                                    which,
+                                    axis: SdlAxis::from_raw_sdl(axis),
+                                    value
+                                }
+                            );
+                        },
+                    Event::ControllerButtonDown { timestamp, which, button } 
+                        => {
+                            events.push(
+                                SdlEvent::ButtonPress {
+                                    timestamp,
+                                    which,
+                                    button: SdlButton::from_raw_sdl(
+                                        button,
+                                        self.game_controllers
+                                            .get(&which)
+                                            .expect("Failed to get game controller.")
+                                            .name()
+                                            .as_str()
+                                    ),
+                                    pressed: true
+                                }
+                            );
+                        },
                     Event::ControllerButtonUp { timestamp, which, button } => {
                         events.push(
-                            SdlEvent::ButtonPress(
+                            SdlEvent::ButtonPress {
                                 timestamp,
                                 which,
-                                SdlButton::from_raw_sdl(
+                                button: SdlButton::from_raw_sdl(
                                     button,
                                     self.game_controllers
                                         .get(&which)
@@ -97,8 +105,8 @@ impl SdlReader {
                                         .name()
                                         .as_str()
                                 ),
-                                false
-                            )
+                                pressed: false
+                            }
                         );
                     },
 
