@@ -1,7 +1,7 @@
 use serde::{Serialize, Deserialize};
 use sdl2::controller::{Axis, Button};
 
-#[derive(Copy, Clone, PartialEq, Eq, Serialize, Deserialize)]
+#[derive(Copy, Clone, PartialEq, Eq, Hash, Serialize, Deserialize)]
 pub enum SdlAxis {
     LeftX,
     LeftY,
@@ -31,7 +31,7 @@ impl SdlAxis {
     }
 }
 
-#[derive(Copy, Clone, PartialEq, Eq, Serialize, Deserialize)]
+#[derive(Copy, Clone, PartialEq, Eq, Hash, Serialize, Deserialize)]
 pub enum SdlButton {
     A,
     B,
